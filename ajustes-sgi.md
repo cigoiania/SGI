@@ -20,9 +20,25 @@
 
 ---
 
+## Resumo (triagem)
+
+Visão rápida para o time de dev. As **prioridades são sugestões iniciais** — ajuste
+conforme sua necessidade. Cada item tem um **ID estável** (SGI-N) para facilitar a
+referência nas conversas com o dev.
+
+| ID | Item | Prioridade (sugerida) | Status |
+|----|------|-----------------------|--------|
+| SGI-1 | Origem "SITE CI - WHATSAPP" não existe no CI GO | Média | 🔴 Aberto |
+| SGI-2 | Token técnico (JWT) vazando no campo "Histórico/Mensagem" | Alta | 🔴 Aberto |
+| SGI-3 | "Cidade de Interesse" preenchida com a cidade de residência | Média | 🔴 Aberto |
+| SGI-4 | Sobreposição de campos em lead cadastrado mais de uma vez | A definir | ⚠️ A esclarecer |
+| SGI-5 | Falha ao enviar mensagem via Evolution (link não entregue) | Alta | 🔴 Aberto |
+
+---
+
 ## Itens
 
-### 1. 🔴 Opção de origem "SITE CI - WHATSAPP" não existe no CI GO (sistema da franqueadora)
+### SGI-1 · 🔴 Opção de origem "SITE CI - WHATSAPP" não existe no CI GO (sistema da franqueadora)
 
 No SGI, o campo de **origem/mídia (publicidade)** do lead tem uma opção
 chamada **"SITE CI - WHATSAPP"**. Essa origem **não existe** no **CI GO**
@@ -41,7 +57,7 @@ do SGI, mantendo apenas as opções que espelham as existentes no CI GO (ex.:
 > mostrando apenas `SITE CI - WHATSAPP CHATBOT` e `SITE CI - WHATSAPP FORM`
 > como opções ao digitar "wha".
 
-### 2. 🔴 Token técnico vazando no campo "Histórico/Mensagem"
+### SGI-2 · 🔴 Token técnico vazando no campo "Histórico/Mensagem"
 
 No cadastro de leads vindos de **SITE CI - WHATSAPP CHATBOT**, o campo
 **Histórico/Mensagem** (que deveria conter só origem, produto, perguntas e
@@ -65,7 +81,7 @@ ser tratado/descartado pela integração.
 do WhatsApp Chatbot para não incluir parâmetros de URL/tokens de sessão no
 campo de mensagem — apenas os dados estruturados do lead.
 
-### 3. 🔴 Campo "Cidade de Interesse" preenchido com a cidade de residência do lead
+### SGI-3 · 🔴 Campo "Cidade de Interesse" preenchido com a cidade de residência do lead
 
 O campo **"Cidade de Interesse"** está sendo preenchido automaticamente com a
 **cidade onde o lead mora** (ex.: "Goiânia"), quando na verdade o lead **não
@@ -78,7 +94,7 @@ cidade de residência do lead para o campo "Cidade de Interesse". O campo
 "Cidade de Interesse" deve ficar vazio quando o lead não informar isso
 explicitamente.
 
-### 4. ⚠️ A esclarecer — Sobreposição de campos quando o mesmo lead é cadastrado mais de uma vez
+### SGI-4 · ⚠️ A esclarecer — Sobreposição de campos quando o mesmo lead é cadastrado mais de uma vez
 
 Quando o mesmo lead entra em contato novamente e já existe no SGI/DataCrazy,
 o fluxo de automação registra as etapas:
@@ -104,7 +120,7 @@ corretos** já registrados no primeiro contato.
 **Ação sugerida:** time de dev confirmar o comportamento real da integração
 com o DataCrazy nesse cenário de lead duplicado e documentar aqui.
 
-### 5. 🔴 Falha ao enviar mensagem via Evolution (WhatsApp) — link de agendamento não entregue
+### SGI-5 · 🔴 Falha ao enviar mensagem via Evolution (WhatsApp) — link de agendamento não entregue
 
 Numa conversa (atendente **Leonardo**, lead **Ana Clara**), a mensagem com o
 **link do Calendly** e a mensagem seguinte **falharam no envio** (ícone vermelho
@@ -157,3 +173,7 @@ instância e se a mensagem é uma mensagem válida.
   prováveis (instância desconectada, payload de URL isolada, cadência) e ações de
   prevenção (monitorar/reconectar instância, fila com retry, validar payload,
   embutir o link em frase, throttle, reenvio fácil pelo atendente).
+- **2026-07-27** — Reorganização para facilitar o repasse ao dev: adicionada a
+  seção **Resumo (triagem)** com tabela (ID, item, prioridade sugerida, status) e
+  atribuídos **IDs estáveis** (SGI-1…SGI-5) aos itens. Conteúdo e descrições dos
+  itens mantidos sem alteração.
