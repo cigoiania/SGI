@@ -33,6 +33,7 @@ referência nas conversas com o dev.
 | SGI-3 | "Cidade de Interesse" preenchida com a cidade de residência | Média | 🔴 Aberto |
 | SGI-4 | Sobreposição de campos em lead cadastrado mais de uma vez | A definir | ⚠️ A esclarecer |
 | SGI-5 | Falha ao enviar mensagem via Evolution (link não entregue) | Alta | 🔴 Aberto |
+| SGI-6 | [Novo módulo] Pós-vendas (Turismo): lançamento de vendas, financeiro e NF de comissão | Alta | 🔴 Aberto |
 
 ---
 
@@ -159,6 +160,69 @@ instância e se a mensagem é uma mensagem válida.
 > marcadas com erro (vermelho) e o balão de erro "Não foi possível enviar a
 > mensagem para o Evolution...".
 
+### SGI-6 · 🔴 [Novo módulo] Pós-vendas (aba Turismo) — Lançamento e gestão financeira/fiscal de vendas
+
+**Objetivo:** Na **aba Turismo**, dentro do **pós-vendas**, criar uma área para
+**lançar as vendas** e centralizar a gestão financeira e fiscal. O sistema deve
+ser alimentado a cada venda e **entregar os resultados de vendas por dia, mês e
+ano**, sempre com **valor de custo, valor de venda e comissão**, além de tratar a
+**nota fiscal (NF) da comissão**.
+
+**a) Lançamento da venda — campos necessários:**
+- **Cliente comprador** (com cadastro do comprador — ver item "d").
+- **Fornecedor**.
+- **Voucher(s)** — anexo em **PDF ou print/imagem**.
+- **Valor de custo**.
+- **Valor de venda**.
+- **Markup**.
+- **Comissão**.
+- **Forma de pagamento**.
+- **Pagamento do cliente** (registro do que o cliente pagou).
+- **Pagamento do fornecedor** (registro do que foi pago ao fornecedor).
+- **Data** (da venda / do lançamento).
+- **Observação** (campo de texto livre).
+
+**b) Preenchimento automático por IA (leitura de documentos):**
+- A IA deve **ler o voucher em PDF ou print (imagem)** e **preencher
+  automaticamente** todos os dados possíveis do lançamento.
+- Deve permitir **conferência e ajuste manual** antes de confirmar (ver "f").
+
+**c) Resultados de vendas (relatórios/consolidação):**
+- Consolidar e exibir os resultados **do dia, do mês e do ano**.
+- Mostrar, por venda e em totais: **custo, venda e comissão**.
+
+**d) Cadastro do cliente comprador:**
+- Campo/tela para **cadastrar o cliente comprador** e vinculá-lo à venda.
+
+**e) Nota fiscal (NF) da comissão:**
+- **Emissão da NF da comissão de cada fornecedor.**
+- **Lançamento da NF da comissão de cada venda realizada.**
+
+**f) Edição — tudo editável:**
+- **Todos** os itens devem ser **editáveis**: fornecedores, markup, vendas,
+  datas, valores e qualquer outro dado do sistema.
+
+**g) Listagem e filtros:**
+- Todas as vendas lançadas aparecem **por ordem de lançamento**.
+- **Filtros de busca** para localizar vendas com **todos os seus detalhes**
+  (ex.: cliente, fornecedor, período/data, valor, forma de pagamento).
+
+**⚠️ Pontos a esclarecer (produto/dev):**
+1. **Modelo de comissão** — a comissão é o valor que a **CI recebe do
+   fornecedor** (motivo da NF de comissão) ou algo pago a um vendedor? Como ela
+   se calcula em relação a custo/venda/markup (ex.: `venda = custo + markup`;
+   comissão = % de quê)?
+2. **Nota fiscal** — "NF da comissão de **cada fornecedor**" e "NF da comissão de
+   **cada venda**" são o mesmo fluxo ou dois? A NF é **emitida pelo próprio
+   sistema** (integração com emissor NFS-e/NF-e) ou apenas **lançada/registrada**
+   manualmente depois de emitida por fora?
+3. **Pagamentos** — precisa de **status** (pago / pendente / parcelado), datas de
+   vencimento e baixa, tanto para o cliente quanto para o fornecedor?
+4. **IA de leitura** — quais campos têm prioridade na extração? Os vouchers têm
+   **layout padronizado** por fornecedor?
+5. **Cadastro base** — haverá um cadastro de **fornecedores** (com **markup
+   padrão**) reaproveitado nos lançamentos?
+
 ---
 
 ## 🗒️ Changelog
@@ -173,7 +237,12 @@ instância e se a mensagem é uma mensagem válida.
   prováveis (instância desconectada, payload de URL isolada, cadência) e ações de
   prevenção (monitorar/reconectar instância, fila com retry, validar payload,
   embutir o link em frase, throttle, reenvio fácil pelo atendente).
-- **2026-07-27** — Reorganização para facilitar o repasse ao dev: adicionada a
+- **2026-07-28** — Reorganização para facilitar o repasse ao dev: adicionada a
   seção **Resumo (triagem)** com tabela (ID, item, prioridade sugerida, status) e
   atribuídos **IDs estáveis** (SGI-1…SGI-5) aos itens. Conteúdo e descrições dos
   itens mantidos sem alteração.
+- **2026-07-28** — Registrado o **SGI-6**: novo módulo de **Pós-vendas (aba
+  Turismo)** para lançamento e gestão financeira/fiscal de vendas — vouchers,
+  pagamentos de cliente e fornecedor, custo/venda/comissão, notas fiscais de
+  comissão, leitura automática por IA (PDF/print), listagem por ordem de
+  lançamento com filtros, e edição total dos dados. Inclui pontos a esclarecer.
