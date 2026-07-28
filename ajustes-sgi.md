@@ -34,6 +34,7 @@ referência nas conversas com o dev.
 | SGI-4 | Sobreposição de campos em lead cadastrado mais de uma vez | A definir | ⚠️ A esclarecer |
 | SGI-5 | Falha ao enviar mensagem via Evolution (link não entregue) | Alta | 🔴 Aberto |
 | SGI-6 | [Novo módulo] Pós-vendas (Turismo): lançamento de vendas, financeiro e NF de comissão | Alta | 🔴 Aberto |
+| SGI-7 | [Novo módulo] Cadastros base: Clientes, Vendedores, Fornecedores, Parceiros, Companhias Aéreas | Alta | 🔴 Aberto |
 
 ---
 
@@ -209,7 +210,8 @@ ano**, sempre com **valor de custo, valor de venda e comissão**, além de trata
   necessidade da captura estruturada (ver nota acima).
 
 **d) Cadastro do cliente comprador:**
-- Campo/tela para **cadastrar o cliente comprador** e vinculá-lo à venda.
+- Campo/tela para **cadastrar o cliente comprador** e vinculá-lo à venda
+  (faz parte do módulo de **Cadastros → Clientes** — ver **SGI-7**).
 
 **e) Controle de pagamentos (cliente e fornecedor):**
 - Cada pagamento precisa de **status de controle**: **Pago / Pendente /
@@ -238,7 +240,8 @@ ano**, sempre com **valor de custo, valor de venda e comissão**, além de trata
   vendas, datas, valores e qualquer outro dado do sistema.
 
 **h) Cadastro de fornecedores:**
-- Cadastro de **fornecedores** reaproveitado nos lançamentos.
+- Cadastro de **fornecedores** reaproveitado nos lançamentos (parte do módulo de
+  **Cadastros → Fornecedores** — ver **SGI-7**).
 - O **markup** pode ficar **em aberto** por lançamento **ou** ser **derivado** da
   leitura de **custo × venda** (ver "a").
 
@@ -250,6 +253,45 @@ ano**, sempre com **valor de custo, valor de venda e comissão**, além de trata
 **✅ Sem pontos em aberto no momento** — todas as dúvidas levantadas foram
 definidas (ver seções acima). A spec está pronta para repasse ao dev; novos
 prints/detalhes podem refiná-la.
+
+### SGI-7 · 🔴 [Novo módulo] Cadastros (base de dados mestre do sistema)
+
+**Objetivo:** Ter uma **área de Cadastros** (menu próprio) com os registros-base
+reutilizados em todo o sistema — inclusive alimentando o lançamento de vendas do
+**SGI-6**. Conforme o menu do sistema, os cadastros são:
+
+- **Clientes**
+- **Vendedores**
+- **Fornecedores**
+- **Parceiros**
+- **Companhias Aéreas**
+
+**Requisitos gerais (para todos os cadastros):**
+- **CRUD completo:** criar, listar, **editar** e inativar/excluir.
+- **Busca/filtro** dentro de cada cadastro.
+- **Reaproveitáveis** nas telas e lançamentos do sistema (ex.: selecionar um
+  fornecedor/cliente já cadastrado ao lançar uma venda — ver **SGI-6**).
+- Tudo **editável** (coerente com a regra geral do SGI-6).
+
+**Campos por cadastro (sugestão inicial — confirmar/ajustar):**
+- **Clientes:** nome, CPF/CNPJ, contato (telefone/WhatsApp, e-mail), cidade.
+  *(É o mesmo "cliente comprador" usado no SGI-6.)*
+- **Vendedores:** nome, contato. *(Ver ponto sobre comissão do vendedor abaixo.)*
+- **Fornecedores:** nome/razão social, CNPJ, **markup padrão** (opcional — pode
+  ficar em aberto por venda, ver SGI-6), contato, tipo de serviço.
+- **Parceiros:** nome, contato, tipo de parceria. *(A detalhar.)*
+- **Companhias Aéreas:** nome, **código (IATA)**. *(A detalhar.)*
+
+**⚠️ Pontos a esclarecer:**
+1. **Campos exatos** de cada cadastro — os acima são só uma base; me confirma o
+   que precisa em cada um.
+2. **Vendedores** — existe **comissão do vendedor** por venda? Se sim, o
+   lançamento do SGI-6 deve **vincular o vendedor** e calcular a comissão dele.
+3. **Parceiros** — qual o papel do parceiro no fluxo (indicação? comissionamento?)
+   para definir o que cadastrar e como se liga às vendas.
+4. **Companhias Aéreas** — indicam que o Turismo também vende **aéreo**? Se sim, o
+   SGI-6 (hoje voltado a hospedagem/passeios/transfer) precisa cobrir venda de
+   passagens também.
 
 ---
 
@@ -289,3 +331,9 @@ prints/detalhes podem refiná-la.
   Cancelado / Estornado**. Registrada **fase futura** de **integração bancária**
   (reconhecer pagamentos e sinalizar comissões pendentes). Sem pontos em aberto
   no momento.
+- **2026-07-28** — Registrado o **SGI-7**: módulo de **Cadastros** (base mestre)
+  com **Clientes, Vendedores, Fornecedores, Parceiros e Companhias Aéreas**,
+  reaproveitados em todo o sistema (inclusive no SGI-6), com CRUD + busca + edição
+  em cada cadastro. Campos por cadastro sugeridos (a confirmar) e pontos a
+  esclarecer (comissão de vendedor, papel do parceiro, venda de aéreo via
+  companhias aéreas). Cruzamentos adicionados no SGI-6 (itens "d" e "h").
