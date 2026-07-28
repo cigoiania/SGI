@@ -168,60 +168,86 @@ ser alimentado a cada venda e **entregar os resultados de vendas por dia, mês e
 ano**, sempre com **valor de custo, valor de venda e comissão**, além de tratar a
 **nota fiscal (NF) da comissão**.
 
+> **Importante:** **todos os dados abaixo são essenciais para os relatórios** —
+> precisam ser gravados de forma **estruturada** (pesquisável, filtrável e
+> somável), não apenas como texto solto.
+
 **a) Lançamento da venda — campos necessários:**
-- **Cliente comprador** (com cadastro do comprador — ver item "d").
-- **Fornecedor**.
-- **Voucher(s)** — anexo em **PDF ou print/imagem**.
+- **Cliente comprador** (com cadastro do comprador — ver "d").
+- **Fornecedor** (do cadastro de fornecedores — ver "h").
+- **Voucher(s)** — anexo em **PDF ou print/imagem** (fonte para a IA — ver "b").
 - **Valor de custo**.
 - **Valor de venda**.
-- **Markup**.
-- **Comissão**.
+- **Markup** — regra **`Venda = Custo + Markup`**. Pode ser **preenchido em
+  aberto** ou **calculado pelo sistema** a partir de custo e venda
+  (`Markup = Venda − Custo`).
+- **Comissão** — **campo de percentual (%) aberto** (varia a cada venda); a
+  partir do % o sistema calcula o **valor** da comissão.
 - **Forma de pagamento**.
-- **Pagamento do cliente** (registro do que o cliente pagou).
-- **Pagamento do fornecedor** (registro do que foi pago ao fornecedor).
+- **Pagamento do cliente** — ver controle de pagamentos em "e".
+- **Pagamento do fornecedor** — ver controle de pagamentos em "e".
 - **Data** (da venda / do lançamento).
 - **Observação** (campo de texto livre).
 
-**b) Preenchimento automático por IA (leitura de documentos):**
+**b) Preenchimento automático por IA (leitura de vouchers):**
 - A IA deve **ler o voucher em PDF ou print (imagem)** e **preencher
-  automaticamente** todos os dados possíveis do lançamento.
-- Deve permitir **conferência e ajuste manual** antes de confirmar (ver "f").
+  automaticamente** os campos do lançamento, com **conferência/ajuste manual**
+  antes de salvar.
+- Os vouchers têm **layout parecido**. Campos que a IA deve **extrair**:
+  - **Número/localizador da reserva**
+  - **Data**
+  - **Quantidade de hóspedes**
+  - **Nome do prestador de serviço local** (hotel, passeios, transfer etc.)
+  - **Cidade**
+  - **Endereço**
+  - **Nomes dos hóspedes**
 
 **c) Resultados de vendas (relatórios/consolidação):**
 - Consolidar e exibir os resultados **do dia, do mês e do ano**.
 - Mostrar, por venda e em totais: **custo, venda e comissão**.
+- Os relatórios se apoiam em **todos** os campos do lançamento — daí a
+  necessidade da captura estruturada (ver nota acima).
 
 **d) Cadastro do cliente comprador:**
 - Campo/tela para **cadastrar o cliente comprador** e vinculá-lo à venda.
 
-**e) Nota fiscal (NF) da comissão:**
-- **Emissão da NF da comissão de cada fornecedor.**
-- **Lançamento da NF da comissão de cada venda realizada.**
+**e) Controle de pagamentos (cliente e fornecedor):**
+- Cada pagamento precisa de **status de controle** (ex.: **pago / pendente /
+  parcelado** — confirmar a lista final).
+- Registrar **tipo/forma de pagamento** e os **dados do pagamento** (ex.: valor,
+  data, parcelas/vencimento).
+- Vale tanto para o **pagamento do cliente** quanto para o **pagamento ao
+  fornecedor**.
 
-**f) Edição — tudo editável:**
-- **Todos** os itens devem ser **editáveis**: fornecedores, markup, vendas,
-  datas, valores e qualquer outro dado do sistema.
+**f) Nota fiscal (NF) da comissão:**
+- A NF é emitida **somente sobre o valor da comissão**.
+- **A princípio, o sistema apenas lança/registra** a **NF já emitida por fora**
+  (não emite a NF nesta primeira fase).
+- **Uma NF por fornecedor**, cujo valor é a **somatória das comissões** daquele
+  fornecedor. Ou seja, o sistema precisa **agrupar por fornecedor** e **somar as
+  comissões** das vendas para compor/registrar a NF.
+  - ⚠️ **A confirmar:** critério de **agrupamento/fechamento** (ex.: por mês? por
+    seleção manual das vendas incluídas?) para fechar a NF de cada fornecedor.
 
-**g) Listagem e filtros:**
+**g) Edição — tudo editável:**
+- **Todos** os itens devem ser **editáveis**: fornecedores, markup, comissão,
+  vendas, datas, valores e qualquer outro dado do sistema.
+
+**h) Cadastro de fornecedores:**
+- Cadastro de **fornecedores** reaproveitado nos lançamentos.
+- O **markup** pode ficar **em aberto** por lançamento **ou** ser **derivado** da
+  leitura de **custo × venda** (ver "a").
+
+**i) Listagem e filtros:**
 - Todas as vendas lançadas aparecem **por ordem de lançamento**.
 - **Filtros de busca** para localizar vendas com **todos os seus detalhes**
-  (ex.: cliente, fornecedor, período/data, valor, forma de pagamento).
+  (ex.: cliente, fornecedor, período/data, valor, forma de pagamento, status).
 
-**⚠️ Pontos a esclarecer (produto/dev):**
-1. **Modelo de comissão** — a comissão é o valor que a **CI recebe do
-   fornecedor** (motivo da NF de comissão) ou algo pago a um vendedor? Como ela
-   se calcula em relação a custo/venda/markup (ex.: `venda = custo + markup`;
-   comissão = % de quê)?
-2. **Nota fiscal** — "NF da comissão de **cada fornecedor**" e "NF da comissão de
-   **cada venda**" são o mesmo fluxo ou dois? A NF é **emitida pelo próprio
-   sistema** (integração com emissor NFS-e/NF-e) ou apenas **lançada/registrada**
-   manualmente depois de emitida por fora?
-3. **Pagamentos** — precisa de **status** (pago / pendente / parcelado), datas de
-   vencimento e baixa, tanto para o cliente quanto para o fornecedor?
-4. **IA de leitura** — quais campos têm prioridade na extração? Os vouchers têm
-   **layout padronizado** por fornecedor?
-5. **Cadastro base** — haverá um cadastro de **fornecedores** (com **markup
-   padrão**) reaproveitado nos lançamentos?
+**⚠️ Pontos ainda a esclarecer:**
+1. **Fechamento da NF por fornecedor** — critério de agrupamento das comissões
+   (mês fechado? seleção manual das vendas incluídas?).
+2. **Status de pagamento** — confirmar a lista exata usada no dia a dia (ex.:
+   pago, pendente, parcialmente pago, parcelado, estornado).
 
 ---
 
@@ -246,3 +272,11 @@ ano**, sempre com **valor de custo, valor de venda e comissão**, além de trata
   pagamentos de cliente e fornecedor, custo/venda/comissão, notas fiscais de
   comissão, leitura automática por IA (PDF/print), listagem por ordem de
   lançamento com filtros, e edição total dos dados. Inclui pontos a esclarecer.
+- **2026-07-28** — SGI-6 detalhado com as definições do cliente: `Venda = Custo +
+  Markup` (markup em aberto ou calculado por custo × venda); **comissão em %
+  aberto**; **NF apenas lançada** (emitida por fora), **por fornecedor** e igual à
+  **somatória das comissões**; **controle de pagamentos** com status/tipo/dados
+  (cliente e fornecedor); **campos que a IA extrai do voucher** (localizador,
+  data, hóspedes, prestador, cidade, endereço, nomes); **cadastro de
+  fornecedores**; reforço de que todos os dados alimentam os relatórios. Restam 2
+  pontos a confirmar (fechamento da NF por fornecedor; lista de status de pgto).
