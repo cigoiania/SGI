@@ -212,22 +212,26 @@ ano**, sempre com **valor de custo, valor de venda e comissão**, além de trata
 - Campo/tela para **cadastrar o cliente comprador** e vinculá-lo à venda.
 
 **e) Controle de pagamentos (cliente e fornecedor):**
-- Cada pagamento precisa de **status de controle** (ex.: **pago / pendente /
-  parcelado** — confirmar a lista final).
+- Cada pagamento precisa de **status de controle**: **Pago / Pendente /
+  Parcelado / Cancelado / Estornado**.
 - Registrar **tipo/forma de pagamento** e os **dados do pagamento** (ex.: valor,
   data, parcelas/vencimento).
 - Vale tanto para o **pagamento do cliente** quanto para o **pagamento ao
   fornecedor**.
 
-**f) Nota fiscal (NF) da comissão:**
-- A NF é emitida **somente sobre o valor da comissão**.
+**f) Nota fiscal (NF) da comissão + recebimento da comissão:**
+- A NF é **somente sobre o valor da comissão**.
 - **A princípio, o sistema apenas lança/registra** a **NF já emitida por fora**
   (não emite a NF nesta primeira fase).
-- **Uma NF por fornecedor**, cujo valor é a **somatória das comissões** daquele
-  fornecedor. Ou seja, o sistema precisa **agrupar por fornecedor** e **somar as
-  comissões** das vendas para compor/registrar a NF.
-  - ⚠️ **A confirmar:** critério de **agrupamento/fechamento** (ex.: por mês? por
-    seleção manual das vendas incluídas?) para fechar a NF de cada fornecedor.
+- **Uma NF por fornecedor**, com valor = **somatória das comissões**. As vendas
+  que compõem cada NF são definidas por **seleção manual** — você marca as
+  **reservas** que aquela NF cobre.
+- A **IA deve ler o documento da NF** e **vincular/preencher os dados em cada
+  reserva** a que a NF se refere.
+- **Campo para marcar que o fornecedor efetuou o pagamento** da comissão
+  (status **comissão recebida × pendente**).
+- 🔜 **Fase futura:** **integração com o banco** para **reconhecer os pagamentos
+  automaticamente** e avisar quando a **comissão ainda estiver pendente**.
 
 **g) Edição — tudo editável:**
 - **Todos** os itens devem ser **editáveis**: fornecedores, markup, comissão,
@@ -243,11 +247,9 @@ ano**, sempre com **valor de custo, valor de venda e comissão**, além de trata
 - **Filtros de busca** para localizar vendas com **todos os seus detalhes**
   (ex.: cliente, fornecedor, período/data, valor, forma de pagamento, status).
 
-**⚠️ Pontos ainda a esclarecer:**
-1. **Fechamento da NF por fornecedor** — critério de agrupamento das comissões
-   (mês fechado? seleção manual das vendas incluídas?).
-2. **Status de pagamento** — confirmar a lista exata usada no dia a dia (ex.:
-   pago, pendente, parcialmente pago, parcelado, estornado).
+**✅ Sem pontos em aberto no momento** — todas as dúvidas levantadas foram
+definidas (ver seções acima). A spec está pronta para repasse ao dev; novos
+prints/detalhes podem refiná-la.
 
 ---
 
@@ -280,3 +282,10 @@ ano**, sempre com **valor de custo, valor de venda e comissão**, além de trata
   data, hóspedes, prestador, cidade, endereço, nomes); **cadastro de
   fornecedores**; reforço de que todos os dados alimentam os relatórios. Restam 2
   pontos a confirmar (fechamento da NF por fornecedor; lista de status de pgto).
+- **2026-07-28** — SGI-6 fechado nos 2 pontos que faltavam: **NF por fornecedor
+  agrupa comissões por seleção manual** das reservas; **IA também lê a NF** e
+  vincula os dados às reservas cobertas; **campo "fornecedor pagou a comissão"**
+  (recebida × pendente); **status de pagamento = Pago / Pendente / Parcelado /
+  Cancelado / Estornado**. Registrada **fase futura** de **integração bancária**
+  (reconhecer pagamentos e sinalizar comissões pendentes). Sem pontos em aberto
+  no momento.
