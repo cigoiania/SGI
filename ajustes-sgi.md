@@ -186,9 +186,9 @@ ano**, sempre com **valor de custo, valor de venda e comissão**, além de trata
 - **Comissão do fornecedor** — **campo de percentual (%) aberto** (varia a cada
   venda); a partir do % o sistema calcula o **valor** da comissão recebida do
   fornecedor.
-- **Comissão do vendedor** — **padrão 40%**, em **campo ajustável** por venda,
-  vinculada ao **vendedor** (SGI-7). ⚠️ *Confirmar a base de cálculo (markup?
-  comissão do fornecedor? lucro?).*
+- **Comissão do vendedor** — **padrão 40%** (campo **ajustável** por venda),
+  calculada **sobre o markup**: `Comissão do vendedor = 40% × Markup`. Vinculada
+  ao **vendedor** (SGI-7).
 - **Forma de pagamento**.
 - **Pagamento do cliente** — ver controle de pagamentos em "e".
 - **Pagamento do fornecedor** — ver controle de pagamentos em "e".
@@ -225,6 +225,8 @@ ano**, sempre com **valor de custo, valor de venda e comissão**, além de trata
   data, parcelas/vencimento).
 - Vale tanto para o **pagamento do cliente** quanto para o **pagamento ao
   fornecedor**.
+- O **vencimento do pagamento ao fornecedor** pode ser calculado a partir do
+  **prazo para pagamento** definido no cadastro do fornecedor (ver **SGI-7**).
 
 **f) Nota fiscal (NF) da comissão + recebimento da comissão:**
 - A NF é **somente sobre o valor da comissão**.
@@ -280,8 +282,7 @@ reutilizados em todo o sistema — inclusive alimentando o lançamento de vendas
   fornecedor/cliente já cadastrado ao lançar uma venda — ver **SGI-6**).
 - Tudo **editável** (coerente com a regra geral do SGI-6).
 
-**Campos por cadastro** — confirmando um a um (✅ = já definido pelo cliente;
-demais são sugestão a confirmar):
+**Campos por cadastro** (✅ = definido pelo cliente):
 - **Clientes** ✅ *(mesmo "cliente comprador" do SGI-6)*:
   - **Nome**
   - **Data de nascimento**
@@ -290,18 +291,14 @@ demais são sugestão a confirmar):
   - **CPF** e **RG**
   - **Passaporte** — número e **data de expiração**
   - **Endereço** completo com **CEP**
-- **Vendedores:** nome, contato, **comissão padrão = 40%** (campo **ajustável**
-  por venda). *(Entra no cálculo do SGI-6.)*
-- **Fornecedores:** nome/razão social, CNPJ, **markup padrão** (opcional — pode
-  ficar em aberto por venda, ver SGI-6), contato, tipo de serviço.
+- **Vendedores** ✅: nome, contato, **comissão padrão = 40% sobre o markup**
+  (campo **ajustável** por venda). *(Entra no cálculo do SGI-6.)*
+- **Fornecedores** ✅: **nome/razão social**, **CNPJ**, **prazo para pagamento**
+  (prazo para pagar o fornecedor — alimenta o vencimento no SGI-6). **Markup
+  padrão** opcional (pode ficar em aberto por venda — ver SGI-6).
 
-**⚠️ Pontos a esclarecer:**
-1. **Base da comissão do vendedor** — ✅ o percentual está definido em **40%
-   (ajustável)**. Falta definir **sobre o que** incidem os 40% (markup? comissão
-   do fornecedor? lucro da venda?).
-2. **Campos de Fornecedores** — confirmar os campos exatos (ex.: **dados
-   bancários** para o fluxo de comissão, tipo de serviço). *(Clientes e Vendedores
-   já definidos.)*
+**✅ Sem pontos em aberto no momento** — cadastros definidos: **Clientes,
+Vendedores e Fornecedores** (com seus campos). Novos detalhes podem refiná-lo.
 
 ---
 
@@ -354,3 +351,10 @@ demais são sugestão a confirmar):
   **comissão do vendedor** — base dos 40% a confirmar); **Parceiros** e
   **Companhias Aéreas** movidos para **fora do escopo** (Turismo **sem venda de
   aéreo**). Cadastros a implementar: **Clientes, Vendedores, Fornecedores**.
+- **2026-07-28** — Definida a **base da comissão do vendedor**: **40% sobre o
+  markup** (`Comissão do vendedor = 40% × Markup`, ajustável). Atualizado no SGI-6
+  (item "a") e no SGI-7.
+- **2026-07-28** — Campos de **Fornecedores** definidos: **CNPJ** e **prazo para
+  pagamento** (além de nome/razão social; markup padrão opcional). O prazo
+  alimenta o **vencimento do pagamento ao fornecedor** no SGI-6. **SGI-7 sem
+  pontos em aberto** — cadastros: Clientes, Vendedores, Fornecedores.
