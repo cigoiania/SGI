@@ -34,7 +34,7 @@ referência nas conversas com o dev.
 | SGI-4 | Sobreposição de campos em lead cadastrado mais de uma vez | A definir | ⚠️ A esclarecer |
 | SGI-5 | Falha ao enviar mensagem via Evolution (link não entregue) | Alta | 🔴 Aberto |
 | SGI-6 | [Novo módulo] Pós-vendas (Turismo): lançamento de vendas, financeiro e NF de comissão | Alta | 🔴 Aberto |
-| SGI-7 | [Novo módulo] Cadastros base: Clientes, Vendedores, Fornecedores, Parceiros, Companhias Aéreas | Alta | 🔴 Aberto |
+| SGI-7 | [Novo módulo] Cadastros base: Clientes, Vendedores, Fornecedores | Alta | 🔴 Aberto |
 
 ---
 
@@ -176,14 +176,19 @@ ano**, sempre com **valor de custo, valor de venda e comissão**, além de trata
 **a) Lançamento da venda — campos necessários:**
 - **Cliente comprador** (com cadastro do comprador — ver "d").
 - **Fornecedor** (do cadastro de fornecedores — ver "h").
+- **Vendedor** (responsável pela venda — do cadastro de **Vendedores**, ver SGI-7).
 - **Voucher(s)** — anexo em **PDF ou print/imagem** (fonte para a IA — ver "b").
 - **Valor de custo**.
 - **Valor de venda**.
 - **Markup** — regra **`Venda = Custo + Markup`**. Pode ser **preenchido em
   aberto** ou **calculado pelo sistema** a partir de custo e venda
   (`Markup = Venda − Custo`).
-- **Comissão** — **campo de percentual (%) aberto** (varia a cada venda); a
-  partir do % o sistema calcula o **valor** da comissão.
+- **Comissão do fornecedor** — **campo de percentual (%) aberto** (varia a cada
+  venda); a partir do % o sistema calcula o **valor** da comissão recebida do
+  fornecedor.
+- **Comissão do vendedor** — **padrão 40%**, em **campo ajustável** por venda,
+  vinculada ao **vendedor** (SGI-7). ⚠️ *Confirmar a base de cálculo (markup?
+  comissão do fornecedor? lucro?).*
 - **Forma de pagamento**.
 - **Pagamento do cliente** — ver controle de pagamentos em "e".
 - **Pagamento do fornecedor** — ver controle de pagamentos em "e".
@@ -263,8 +268,10 @@ reutilizados em todo o sistema — inclusive alimentando o lançamento de vendas
 - **Clientes**
 - **Vendedores**
 - **Fornecedores**
-- **Parceiros**
-- **Companhias Aéreas**
+
+> **Fora do escopo:** **Parceiros** e **Companhias Aéreas** aparecem no menu do
+> sistema, mas **não são necessários** e **não devem ser implementados** neste
+> momento. O Turismo **não incluirá venda de aéreo**.
 
 **Requisitos gerais (para todos os cadastros):**
 - **CRUD completo:** criar, listar, **editar** e inativar/excluir.
@@ -273,25 +280,28 @@ reutilizados em todo o sistema — inclusive alimentando o lançamento de vendas
   fornecedor/cliente já cadastrado ao lançar uma venda — ver **SGI-6**).
 - Tudo **editável** (coerente com a regra geral do SGI-6).
 
-**Campos por cadastro (sugestão inicial — confirmar/ajustar):**
-- **Clientes:** nome, CPF/CNPJ, contato (telefone/WhatsApp, e-mail), cidade.
-  *(É o mesmo "cliente comprador" usado no SGI-6.)*
-- **Vendedores:** nome, contato. *(Ver ponto sobre comissão do vendedor abaixo.)*
+**Campos por cadastro** — confirmando um a um (✅ = já definido pelo cliente;
+demais são sugestão a confirmar):
+- **Clientes** ✅ *(mesmo "cliente comprador" do SGI-6)*:
+  - **Nome**
+  - **Data de nascimento**
+  - **Telefone**
+  - **E-mail**
+  - **CPF** e **RG**
+  - **Passaporte** — número e **data de expiração**
+  - **Endereço** completo com **CEP**
+- **Vendedores:** nome, contato, **comissão padrão = 40%** (campo **ajustável**
+  por venda). *(Entra no cálculo do SGI-6.)*
 - **Fornecedores:** nome/razão social, CNPJ, **markup padrão** (opcional — pode
   ficar em aberto por venda, ver SGI-6), contato, tipo de serviço.
-- **Parceiros:** nome, contato, tipo de parceria. *(A detalhar.)*
-- **Companhias Aéreas:** nome, **código (IATA)**. *(A detalhar.)*
 
 **⚠️ Pontos a esclarecer:**
-1. **Campos exatos** de cada cadastro — os acima são só uma base; me confirma o
-   que precisa em cada um.
-2. **Vendedores** — existe **comissão do vendedor** por venda? Se sim, o
-   lançamento do SGI-6 deve **vincular o vendedor** e calcular a comissão dele.
-3. **Parceiros** — qual o papel do parceiro no fluxo (indicação? comissionamento?)
-   para definir o que cadastrar e como se liga às vendas.
-4. **Companhias Aéreas** — indicam que o Turismo também vende **aéreo**? Se sim, o
-   SGI-6 (hoje voltado a hospedagem/passeios/transfer) precisa cobrir venda de
-   passagens também.
+1. **Base da comissão do vendedor** — ✅ o percentual está definido em **40%
+   (ajustável)**. Falta definir **sobre o que** incidem os 40% (markup? comissão
+   do fornecedor? lucro da venda?).
+2. **Campos de Fornecedores** — confirmar os campos exatos (ex.: **dados
+   bancários** para o fluxo de comissão, tipo de serviço). *(Clientes e Vendedores
+   já definidos.)*
 
 ---
 
@@ -337,3 +347,10 @@ reutilizados em todo o sistema — inclusive alimentando o lançamento de vendas
   em cada cadastro. Campos por cadastro sugeridos (a confirmar) e pontos a
   esclarecer (comissão de vendedor, papel do parceiro, venda de aéreo via
   companhias aéreas). Cruzamentos adicionados no SGI-6 (itens "d" e "h").
+- **2026-07-28** — SGI-7 afinado com o cliente: **campos de Clientes** definidos
+  (nome, nascimento, telefone, e-mail, CPF/RG, passaporte com nº e validade,
+  endereço com CEP); **comissão do vendedor = 40% (ajustável)**, refletida no
+  SGI-6 (novo campo **Vendedor** e separação entre **comissão do fornecedor** e
+  **comissão do vendedor** — base dos 40% a confirmar); **Parceiros** e
+  **Companhias Aéreas** movidos para **fora do escopo** (Turismo **sem venda de
+  aéreo**). Cadastros a implementar: **Clientes, Vendedores, Fornecedores**.
