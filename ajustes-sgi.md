@@ -194,6 +194,11 @@ ano**, sempre com **valor de custo, valor de venda e comissão**, além de trata
 - **Pagamento do fornecedor** — ver controle de pagamentos em "e".
 - **Data** (da venda / do lançamento).
 - **Observação** (campo de texto livre).
+- **Status da venda** — **Ativa** (padrão) ou **Cancelada**. Quando **Cancelada**,
+  registrar:
+  - **Reembolso?** — **sim / não**.
+  - **Valor reembolsado** (quando houver reembolso).
+  - *(É o status da **venda**, diferente do status de **pagamento** do item "e".)*
 
 **b) Preenchimento automático por IA (leitura de vouchers):**
 - A IA deve **ler o voucher em PDF ou print (imagem)** e **preencher
@@ -211,6 +216,8 @@ ano**, sempre com **valor de custo, valor de venda e comissão**, além de trata
 **c) Resultados de vendas (relatórios/consolidação):**
 - Consolidar e exibir os resultados **do dia, do mês e do ano**.
 - Mostrar, por venda e em totais: **custo, venda e comissão**.
+- Identificar **vendas canceladas** e **valores reembolsados** nos resultados
+  (não misturar com as vendas efetivas).
 - Os relatórios se apoiam em **todos** os campos do lançamento — daí a
   necessidade da captura estruturada (ver nota acima).
 
@@ -255,7 +262,8 @@ ano**, sempre com **valor de custo, valor de venda e comissão**, além de trata
 **i) Listagem e filtros:**
 - Todas as vendas lançadas aparecem **por ordem de lançamento**.
 - **Filtros de busca** para localizar vendas com **todos os seus detalhes**
-  (ex.: cliente, fornecedor, período/data, valor, forma de pagamento, status).
+  (ex.: cliente, fornecedor, período/data, valor, forma de pagamento, **status da
+  venda** — inclusive canceladas — e status de pagamento).
 
 **✅ Sem pontos em aberto no momento** — todas as dúvidas levantadas foram
 definidas (ver seções acima). A spec está pronta para repasse ao dev; novos
@@ -358,3 +366,7 @@ Vendedores e Fornecedores** (com seus campos). Novos detalhes podem refiná-lo.
   pagamento** (além de nome/razão social; markup padrão opcional). O prazo
   alimenta o **vencimento do pagamento ao fornecedor** no SGI-6. **SGI-7 sem
   pontos em aberto** — cadastros: Clientes, Vendedores, Fornecedores.
+- **2026-07-28** — SGI-6: adicionado o **status da venda** (**Ativa/Cancelada**);
+  quando **cancelada**, registrar **reembolso (sim/não)** e **valor reembolsado**.
+  Cancelamentos e reembolsos passam a ser identificados nos **relatórios** e
+  **filtros** (é o status da venda, distinto do status de pagamento).
