@@ -35,6 +35,8 @@ referência nas conversas com o dev.
 | SGI-5 | Falha ao enviar mensagem via Evolution (link não entregue) | Alta | 🔴 Aberto |
 | SGI-6 | [Novo módulo] Pós-vendas (Turismo): lançamento de vendas, financeiro e NF de comissão | Alta | 🔴 Aberto |
 | SGI-7 | [Novo módulo] Cadastros base: Clientes, Vendedores, Fornecedores | Alta | 🔴 Aberto |
+| SGI-8 | "País de interesse" vazio mostra "Irlanda" (mockup) em vez de "—" | Baixa | 🔴 Aberto |
+| SGI-9 | Observações grava "Produto alterado: X → Y" sem alteração real | Média | 🔴 Aberto |
 
 ---
 
@@ -95,6 +97,11 @@ o que está incorreto.
 cidade de residência do lead para o campo "Cidade de Interesse". O campo
 "Cidade de Interesse" deve ficar vazio quando o lead não informar isso
 explicitamente.
+
+> Evidência (2026-07-28): print do cadastro de novo lead com **Cidade de interesse
+> = "APARECIDA DE GOIÂNIA"**, idêntica à **Localização do lead ("Aparecida De
+> Goiânia | Goiás")** — ou seja, foi copiada a cidade de residência. O lead não
+> informou cidade de interesse.
 
 ### SGI-4 · ⚠️ A esclarecer — Sobreposição de campos quando o mesmo lead é cadastrado mais de uma vez
 
@@ -308,6 +315,35 @@ reutilizados em todo o sistema — inclusive alimentando o lançamento de vendas
 **✅ Sem pontos em aberto no momento** — cadastros definidos: **Clientes,
 Vendedores e Fornecedores** (com seus campos). Novos detalhes podem refiná-lo.
 
+### SGI-8 · 🔴 Campo "País de interesse" vazio mostra "Irlanda" (placeholder/mockup) em vez de "—"
+
+No cadastro de novo lead, quando o **"País de interesse"** **não é preenchido**, o
+campo exibe **"Irlanda"** em cinza (texto de **placeholder/mockup**), o que pode
+ser lido erroneamente como se o país de interesse fosse a Irlanda.
+
+O correto é **não exibir um país de exemplo**: mostrar **"—"** no estado vazio,
+igual aos demais campos não preenchidos (ex.: **Consultor responsável**,
+**Idiomas desejados**, **Modalidade do programa**).
+
+**Ação sugerida:** trocar o placeholder "Irlanda" do campo "País de interesse"
+por **"—"** (ou vazio neutro), padronizando o estado vazio com os outros campos.
+
+> Observação: o dado em si parece **vazio/correto** (o lead não informou país) — o
+> problema é o **placeholder enganoso**. Severidade baixa, mas confunde.
+
+### SGI-9 · 🔴 Observações grava "Produto alterado: X → Y" mesmo sem alteração (ex.: "Cursos → Cursos")
+
+No cadastro de novo lead, o campo **"Observações"** trouxe **"Produto alterado:
+Cursos → Cursos"** — mas **não houve alteração** nem duplicidade de produto: o
+produto sempre foi **Cursos**. A automação está registrando uma "alteração de
+produto" mesmo quando o valor **antigo e o novo são iguais**.
+
+**Ação sugerida:** só gravar a observação **"Produto alterado: A → B" quando
+A ≠ B** (alteração real). Quando o valor não muda, **não escrever nada**.
+
+> Pode estar ligado ao **reprocessamento de lead** (ver SGI-4): reconferir se o
+> log de "produto alterado" dispara em re-submissões sem mudança real.
+
 ---
 
 ## 🗒️ Changelog
@@ -370,3 +406,8 @@ Vendedores e Fornecedores** (com seus campos). Novos detalhes podem refiná-lo.
   quando **cancelada**, registrar **reembolso (sim/não)** e **valor reembolsado**.
   Cancelamentos e reembolsos passam a ser identificados nos **relatórios** e
   **filtros** (é o status da venda, distinto do status de pagamento).
+- **2026-07-28** — Mais erros de interpretação de dados do novo lead (a partir de
+  print): **SGI-3** reforçado com evidência (Cidade de interesse = "Aparecida de
+  Goiânia" = cidade de residência); novo **SGI-8** — "País de interesse" vazio
+  mostra o mockup "Irlanda" em vez de "—"; novo **SGI-9** — Observações grava
+  "Produto alterado: Cursos → Cursos" sem alteração real.
