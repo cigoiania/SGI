@@ -37,6 +37,7 @@ referência nas conversas com o dev.
 | SGI-7 | [Novo módulo] Cadastros base: Clientes, Vendedores, Fornecedores | Alta | 🔴 Aberto |
 | SGI-8 | "País de interesse" vazio mostra "Irlanda" (mockup) em vez de "—" | Baixa | 🔴 Aberto |
 | SGI-9 | Observações grava "Produto alterado: X → Y" sem alteração real | Média | 🔴 Aberto |
+| SGI-10 | Novo Lead (IA): campos/inteligências faltando — nível de inglês, modalidade, áreas→observações, "Outro Produto de interesse" (de/para DataCrazy) | Alta | 🔴 Aberto |
 
 ---
 
@@ -344,6 +345,53 @@ A ≠ B** (alteração real). Quando o valor não muda, **não escrever nada**.
 > Pode estar ligado ao **reprocessamento de lead** (ver SGI-4): reconferir se o
 > log de "produto alterado" dispara em re-submissões sem mudança real.
 
+### SGI-10 · 🔴 Novo Lead ("Processar com IA") — campos e inteligências de interpretação a criar/ajustar
+
+**Contexto:** no fluxo **"Novo Lead → Processar com IA"** (cola-se os dados brutos,
+a IA estrutura e envia ao DataCrazy), várias informações que **vêm no histórico do
+lead** não estão sendo tratadas — faltam campos no SGI e falta inteligência de
+**mapeamento (de/para)** para as opções do DataCrazy.
+
+**a) Criar o campo "Nível de inglês".**
+- O lead informa **"Nível de inglês: Básico"**, mas o SGI **não tem esse campo**.
+- **Ação:** criar o campo **"Nível de inglês"** e **preenchê-lo automaticamente** a
+  partir do histórico do lead.
+
+**b) Auto-preencher a "Modalidade do programa".**
+- O lead informa **"Programa de interesse: Cursos de Formação Profissional"**, mas
+  o campo **"Modalidade do programa"** **não foi preenchido pela IA** — foi
+  preenchido **manualmente** (como "Aplicado para minha profissão").
+- **Ação:** criar a **inteligência de mapeamento** para preencher a "Modalidade do
+  programa" automaticamente a partir do programa/curso informado pelo lead.
+
+**c) Enviar "Em quais áreas tem interesse?" para as Observações.**
+- O lead informa **"Em quais áreas tem interesse?: Atendimento ao cliente Saúde
+  Outras"**, mas essa info **não foi para as Observações** (deveria ter ido).
+- **Ação:** rotear essa informação (e afins que não têm campo próprio no SGI) para
+  o campo **Observações**, para não se perder.
+
+**d) Criar o campo adicional "Outro Produto de interesse" (opções do DataCrazy + de/para).**
+- O lead informa **"Tem interesse em algum outro programa?: Trabalhar e Estudar no
+  Exterior"**, e **falta um campo no SGI** para receber isso.
+- **Ação:**
+  - Criar um **campo adicional novo** chamado **"Outro Produto de interesse"**.
+  - Esse campo deve **puxar as opções automaticamente do DataCrazy via API** — ele
+    **já existe no DataCrazy**, só precisa ser **trazido para o SGI** (opções atuais:
+    High School, Amaze, Intercâmbio Teen, Cursos profissionalizantes, Trabalhar e
+    estudar, Trabalho voluntário, Au pair).
+  - Implementar **de/para (mapeamento)**: o lead chega com um texto (ex.:
+    **"Trabalhar e Estudar no Exterior"**) que precisa ser convertido para a
+    **opção exata do DataCrazy** (ex.: **"Trabalhar e Estudar"**).
+
+**Observação geral (de/para):** o mecanismo de **de/para** do item "d" é um
+**padrão reutilizável** — o mesmo (texto do lead → opção canônica do DataCrazy)
+serve para a "Modalidade do programa" (item "b") e outros campos de opção. Vale
+considerar uma **tabela de de/para centralizada**.
+
+**⚠️ A definir (com o cliente):** as **tabelas de de/para** — quais textos do lead
+correspondem a quais opções do SGI/DataCrazy (Modalidade do programa e "Outro
+Produto de interesse"). O cliente precisa fornecer a lista de equivalências.
+
 ---
 
 ## 🗒️ Changelog
@@ -411,3 +459,9 @@ A ≠ B** (alteração real). Quando o valor não muda, **não escrever nada**.
   Goiânia" = cidade de residência); novo **SGI-8** — "País de interesse" vazio
   mostra o mockup "Irlanda" em vez de "—"; novo **SGI-9** — Observações grava
   "Produto alterado: Cursos → Cursos" sem alteração real.
+- **2026-07-28** — Registrado **SGI-10** (fluxo Novo Lead → Processar com IA):
+  criar campo **Nível de inglês**; **auto-preencher Modalidade do programa**;
+  rotear **"áreas de interesse" → Observações**; criar campo adicional **"Outro
+  Produto de interesse"** puxando opções do **DataCrazy via API** + **de/para**
+  (ex.: "Trabalhar e Estudar no Exterior" → "Trabalhar e Estudar"). A definir: as
+  tabelas de de/para.
