@@ -38,6 +38,8 @@ referência nas conversas com o dev.
 | SGI-8 | "País de interesse" vazio mostra "Irlanda" (mockup) em vez de "—" | Baixa | 🔴 Aberto |
 | SGI-9 | Observações grava "Produto alterado: X → Y" sem alteração real | Média | 🔴 Aberto |
 | SGI-10 | Novo Lead (IA): campos/inteligências faltando — nível de inglês, modalidade, áreas→observações, "Outro Produto de interesse" (de/para DataCrazy) | Alta | 🔴 Aberto |
+| SGI-11 | Detecção de conversa ativa deu falso negativo e a Cibele foi disparada com atendimento humano em andamento | Alta | 🔴 Aberto |
+| SGI-12 | Entender/documentar o "nome completado" ("Karolyne" → nome completo) | A definir | ⚠️ A esclarecer |
 
 ---
 
@@ -392,6 +394,52 @@ considerar uma **tabela de de/para centralizada**.
 correspondem a quais opções do SGI/DataCrazy (Modalidade do programa e "Outro
 Produto de interesse"). O cliente precisa fornecer a lista de equivalências.
 
+### SGI-11 · 🔴 Detecção de "conversa ativa" deu falso negativo e a Cibele foi disparada com atendimento humano em andamento
+
+No cadastro da lead **KAROLYNE DE OLIVEIRA SANTOS** (62991514754), o fluxo reportou
+**"Conversas — Sem conversas ativas em nenhuma instância"** e seguiu para
+**"Cibele — Lead enviado para Cibele com sucesso"**. Porém **havia sim conversa
+ativa**: atendimento **#4270** em **Pré Venda**, com a atendente **Vanessa** já
+respondendo à lead. São **dois problemas**:
+
+1. **Falso negativo na detecção de conversa ativa** — a checagem não encontrou a
+   conversa **#4270** (Pré Venda / Vanessa) que estava ativa. Investigar o porquê
+   (instância consultada, status **"Pré Venda"** não considerado, timing/sincronismo?).
+2. **Cibele acionada com conversa ativa** — por causa do falso negativo, a IA
+   (Cibele) foi injetada **por cima do atendimento humano** (contexto injetado às
+   **11:44**, com a Vanessa atendendo desde **11:19**). A IA **não deve entrar**
+   quando há atendente humano em conversa ativa.
+
+**Ação sugerida:**
+- Corrigir a **detecção de conversa ativa** para cobrir a(s) instância(s) e os
+  status corretos (incluindo **Pré Venda**).
+- **Bloquear o disparo da Cibele** sempre que houver conversa ativa — seguindo o
+  fluxo de **alerta** em vez da IA (coerente com o cenário do **SGI-4**).
+
+> Evidência: print "Lead processado com sucesso" (passos "Conversas — Sem conversas
+> ativas em nenhuma instância" e "Cibele — Lead enviado para Cibele com sucesso") +
+> print da conversa **#4270** (Pré Venda, Vanessa) com o bloco
+> "[INÍCIO DO CONTEXTO INJETADO PARA A IA 02 (CIBELE)]" às 11:44.
+
+### SGI-12 · ⚠️ A esclarecer — Como funciona o "nome completado" (ex.: "Karolyne" → "KAROLYNE DE OLIVEIRA SANTOS")
+
+No processamento do lead, o passo do DataCrazy mostrou **'Nome: nome completado
+("Karolyne" → "KAROLYNE DE OLIVEIRA SANTOS")'**. É um comportamento **desejado**
+(bom!), mas o cliente quer **entender como funciona** — para confiar nele e conhecer
+os limites (ex.: risco de completar com um nome errado).
+
+**Hipótese (a confirmar pelo dev):** como o passo anterior indicou **"Lead já existe
+no DataCrazy"**, o nome provavelmente foi **completado a partir do cadastro
+existente no DataCrazy** (que já tinha o nome completo), substituindo o parcial
+"Karolyne" (vindo do nome do WhatsApp). Outras hipóteses: nome do perfil do WhatsApp
+ou complemento pela própria IA.
+
+**Ação sugerida:** o dev **documentar aqui** a regra real do "nome completado":
+- De onde vem o nome completo (cadastro existente no DataCrazy? WhatsApp? IA?).
+- Quando ele **sobrescreve** o parcial e quando **não** deve sobrescrever — para
+  não trocar um nome correto por um errado (cuidado com homônimos/duplicados —
+  ver **SGI-4**).
+
 ---
 
 ## 🗒️ Changelog
@@ -465,3 +513,10 @@ Produto de interesse"). O cliente precisa fornecer a lista de equivalências.
   Produto de interesse"** puxando opções do **DataCrazy via API** + **de/para**
   (ex.: "Trabalhar e Estudar no Exterior" → "Trabalhar e Estudar"). A definir: as
   tabelas de de/para.
+- **2026-07-28** — Novo **SGI-11**: no cadastro da lead Karolyne, o passo
+  "Conversas" deu **falso negativo** ("Sem conversas ativas...") havendo conversa
+  ativa (**#4270**, Pré Venda, Vanessa), e a **Cibele foi disparada por cima do
+  atendimento humano**. Corrigir a detecção + **bloquear a Cibele** quando houver
+  conversa ativa. Novo **SGI-12** (a esclarecer): documentar como funciona o
+  **"nome completado"** ("Karolyne" → nome completo) — comportamento desejado, o
+  cliente quer entender a regra.
