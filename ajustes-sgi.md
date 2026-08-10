@@ -63,6 +63,12 @@ do SGI, mantendo apenas as opções que espelham as existentes no CI GO (ex.:
 > `SITE CI - WHATSAPP FORM`, `SITE CI - REDES SOCIAIS` etc.; e print do CI GO
 > mostrando apenas `SITE CI - WHATSAPP CHATBOT` e `SITE CI - WHATSAPP FORM`
 > como opções ao digitar "wha".
+>
+> Reconfirmado em 2026-07-28 (novos prints): no CI GO, ao digitar "whats",
+> aparecem só `SITE CI - WHATSAPP CHATBOT` e `SITE CI - WHATSAPP FORM`; no SGI o
+> campo "Como conheceu ou chegou até a CI INTERCÂMBIO?" ainda oferece as **3**
+> opções, com **`SITE CI - WHATSAPP`** (a inválida) selecionável. Segue valendo:
+> **apagar** essa opção.
 
 ### SGI-2 · 🔴 Token técnico vazando no campo "Histórico/Mensagem"
 
@@ -520,3 +526,6 @@ ou complemento pela própria IA.
   conversa ativa. Novo **SGI-12** (a esclarecer): documentar como funciona o
   **"nome completado"** ("Karolyne" → nome completo) — comportamento desejado, o
   cliente quer entender a regra.
+- **2026-07-28** — **SGI-1 reconfirmado** com novos prints (CI GO só oferece
+  CHATBOT e FORM; SGI ainda lista as 3 opções, com "SITE CI - WHATSAPP" ativa).
+  Sem item novo — evidência anexada ao SGI-1.
