@@ -40,7 +40,8 @@ referência nas conversas com o dev.
 | SGI-10 | Novo Lead (IA): campos/inteligências faltando — nível de inglês, modalidade, áreas→observações, "Outro Produto de interesse" (de/para DataCrazy) | Alta | 🔴 Aberto |
 | SGI-11 | Detecção de conversa ativa deu falso negativo e a Cibele foi disparada com atendimento humano em andamento | Alta | 🔴 Aberto |
 | SGI-12 | Entender/documentar o "nome completado" ("Karolyne" → nome completo) | A definir | ⚠️ A esclarecer |
-| SGI-13 | Ajustar o nome do lead conforme o padrão do CI GO já na 1ª criação no SGI | Média | 🔴 Aberto |
+| SGI-13 | Ajustar o nome conforme CI GO (e substituir quando o nome cadastrado for só o do WhatsApp) | Média | 🔴 Aberto |
+| SGI-14 | Aviso de divergência por e-mail não está sendo recebido | Alta | 🔴 Aberto |
 
 ---
 
@@ -447,23 +448,48 @@ ou complemento pela própria IA.
   não trocar um nome correto por um errado (cuidado com homônimos/duplicados —
   ver **SGI-4**).
 
-### SGI-13 · 🔴 Ajustar o nome do lead conforme o padrão do CI GO já na 1ª criação no SGI
+### SGI-13 · 🔴 Ajustar o nome do lead conforme o padrão do CI GO (incl. quando o nome cadastrado é o do WhatsApp)
 
 Hoje o **"nome completado"** (ver **SGI-12**) só acontece quando o lead **já
-existe** no DataCrazy. O cliente quer que, **já na primeira vez** que um lead é
-criado no SGI, o **nome seja ajustado conforme o CI GO** — sem depender de já
-haver cadastro anterior.
+existe** no DataCrazy. O cliente quer que o **nome seja ajustado conforme o CI GO**
+— inclusive já na **1ª criação** no SGI e no caso de divergência abaixo.
 
-**Ação sugerida:** aplicar o **ajuste/normalização do nome conforme o padrão do
-CI GO** no momento da **primeira criação** do lead no SGI.
+**Regra confirmada — "nome cadastrado = nome do WhatsApp":**
+- Quando o **Nome** gravado no DataCrazy for **igual ao campo "Nome WhatsApp"** (ou
+  seja, está salvo só o **apelido do WhatsApp**), **substituir automaticamente pelo
+  nome do CI GO** (o **nome completo recebido**).
+- Pode fazer isso **sempre**, sem risco: o nome do WhatsApp **continua salvo** no
+  campo próprio **"Nome WhatsApp"** do DataCrazy — nada se perde.
+- Isso **sobrepõe** o comportamento atual de **"divergente preservado"**: hoje o
+  sistema mantém o valor do DataCrazy e só avisa; neste caso específico ele deve
+  **trocar** pelo nome do CI GO.
 
-**⚠️ A esclarecer:**
-1. **O que significa "conforme CI GO"** — é **(a)** *formatar* o nome no **padrão
-   do CI GO** (ex.: nome completo em CAIXA ALTA, como "KAROLYNE DE OLIVEIRA
-   SANTOS"), ou **(b)** *buscar/casar* o nome com o registro do **CI GO** (caso já
-   exista lá) e trazer o nome de lá?
-2. **Padrão exato do nome** no CI GO (caixa alta? nome + sobrenome completos?
-   manter/remover acentos?) — confirmar a regra para o dev aplicar.
+**Ação sugerida:** implementar a regra acima e, na 1ª criação, **ajustar/normalizar
+o nome conforme o padrão do CI GO**.
+
+> Evidência (2026-07-28): lead **EMANUEL FARIA** (62991509885) — o DataCrazy tinha
+> **Nome = "Manel"** (idêntico ao **"Nome WhatsApp: Manel"**), mas o recebido era
+> **"EMANUEL FARIA"**; o fluxo **preservou "Manel"** ("1 divergente preservado") em
+> vez de adotar "EMANUEL FARIA". Deveria ter substituído.
+
+**⚠️ A confirmar:** o **padrão de formatação** do nome do CI GO (pelos prints é
+**nome completo em CAIXA ALTA** — ex.: "EMANUEL FARIA", "KAROLYNE DE OLIVEIRA
+SANTOS"). Confirmar.
+
+### SGI-14 · 🔴 Aviso de divergência por e-mail não está sendo recebido
+
+Quando há **divergência de dados** (ex.: nome recebido ≠ nome no DataCrazy), o
+fluxo indica **"Aviso enviado por e-mail"**, mas o cliente **não está recebendo**
+esses e-mails. Esse alerta é importante justamente para agir nos casos marcados
+como **"ação necessária"**.
+
+**Ação sugerida:** investigar a **entrega dos e-mails de alerta** (remetente/SMTP,
+destinatário configurado, caixa de spam/lixo, logs de envio) e garantir que os
+avisos de divergência — e afins (ver **SGI-4**, **SGI-11**) — cheguem de fato.
+
+> Evidência (2026-07-28): tela "Fluxo concluído — ação necessária" do lead EMANUEL
+> FARIA, passo "Dados — 1 campo divergente... Aviso enviado por e-mail"; porém o
+> e-mail não chegou.
 
 ---
 
@@ -552,3 +578,9 @@ CI GO** no momento da **primeira criação** do lead no SGI.
   na **1ª criação** no SGI (hoje o "nome completado" do SGI-12 só ocorre para lead
   já existente). A esclarecer: se é **formatar** no padrão do CI GO ou
   **buscar/casar** com o registro do CI GO, e o **padrão exato** do nome.
+- **2026-07-28** — SGI-13 com **regra confirmada**: quando o **Nome** no DataCrazy
+  for igual ao **"Nome WhatsApp"** (só o apelido), **substituir pelo nome do CI GO**
+  (o apelido fica salvo no campo próprio) — sobrepõe o "divergente preservado".
+  Evidência: lead **EMANUEL FARIA** (DataCrazy "Manel" preservado em vez de
+  "EMANUEL FARIA"). Novo **SGI-14**: **aviso de divergência por e-mail não está
+  chegando**.
