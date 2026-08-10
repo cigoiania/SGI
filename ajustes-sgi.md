@@ -40,6 +40,7 @@ referência nas conversas com o dev.
 | SGI-10 | Novo Lead (IA): campos/inteligências faltando — nível de inglês, modalidade, áreas→observações, "Outro Produto de interesse" (de/para DataCrazy) | Alta | 🔴 Aberto |
 | SGI-11 | Detecção de conversa ativa deu falso negativo e a Cibele foi disparada com atendimento humano em andamento | Alta | 🔴 Aberto |
 | SGI-12 | Entender/documentar o "nome completado" ("Karolyne" → nome completo) | A definir | ⚠️ A esclarecer |
+| SGI-13 | Ajustar o nome do lead conforme o padrão do CI GO já na 1ª criação no SGI | Média | 🔴 Aberto |
 
 ---
 
@@ -446,6 +447,24 @@ ou complemento pela própria IA.
   não trocar um nome correto por um errado (cuidado com homônimos/duplicados —
   ver **SGI-4**).
 
+### SGI-13 · 🔴 Ajustar o nome do lead conforme o padrão do CI GO já na 1ª criação no SGI
+
+Hoje o **"nome completado"** (ver **SGI-12**) só acontece quando o lead **já
+existe** no DataCrazy. O cliente quer que, **já na primeira vez** que um lead é
+criado no SGI, o **nome seja ajustado conforme o CI GO** — sem depender de já
+haver cadastro anterior.
+
+**Ação sugerida:** aplicar o **ajuste/normalização do nome conforme o padrão do
+CI GO** no momento da **primeira criação** do lead no SGI.
+
+**⚠️ A esclarecer:**
+1. **O que significa "conforme CI GO"** — é **(a)** *formatar* o nome no **padrão
+   do CI GO** (ex.: nome completo em CAIXA ALTA, como "KAROLYNE DE OLIVEIRA
+   SANTOS"), ou **(b)** *buscar/casar* o nome com o registro do **CI GO** (caso já
+   exista lá) e trazer o nome de lá?
+2. **Padrão exato do nome** no CI GO (caixa alta? nome + sobrenome completos?
+   manter/remover acentos?) — confirmar a regra para o dev aplicar.
+
 ---
 
 ## 🗒️ Changelog
@@ -529,3 +548,7 @@ ou complemento pela própria IA.
 - **2026-07-28** — **SGI-1 reconfirmado** com novos prints (CI GO só oferece
   CHATBOT e FORM; SGI ainda lista as 3 opções, com "SITE CI - WHATSAPP" ativa).
   Sem item novo — evidência anexada ao SGI-1.
+- **2026-07-28** — Novo **SGI-13**: ajustar o **nome do lead conforme o CI GO** já
+  na **1ª criação** no SGI (hoje o "nome completado" do SGI-12 só ocorre para lead
+  já existente). A esclarecer: se é **formatar** no padrão do CI GO ou
+  **buscar/casar** com o registro do CI GO, e o **padrão exato** do nome.
