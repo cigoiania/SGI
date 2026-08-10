@@ -42,6 +42,7 @@ referência nas conversas com o dev.
 | SGI-12 | Entender/documentar o "nome completado" ("Karolyne" → nome completo) | A definir | ⚠️ A esclarecer |
 | SGI-13 | Ajustar o nome conforme CI GO (e substituir quando o nome cadastrado for só o do WhatsApp) | Média | 🔴 Aberto |
 | SGI-14 | Aviso de divergência por e-mail não está sendo recebido | Alta | 🔴 Aberto |
+| SGI-15 | "Cidade de interesse" preenchida com o país de interesse (ex.: "Estados Unidos") | Média | 🔴 Aberto |
 
 ---
 
@@ -113,6 +114,10 @@ explicitamente.
 > = "APARECIDA DE GOIÂNIA"**, idêntica à **Localização do lead ("Aparecida De
 > Goiânia | Goiás")** — ou seja, foi copiada a cidade de residência. O lead não
 > informou cidade de interesse.
+
+**Relacionado:** **SGI-15** — mesmo campo "Cidade de interesse" preenchido errado,
+mas com o **país de interesse** ("Estados Unidos") em vez de uma cidade. Vale
+corrigir os dois juntos.
 
 ### SGI-4 · ⚠️ A esclarecer — Sobreposição de campos quando o mesmo lead é cadastrado mais de uma vez
 
@@ -491,6 +496,26 @@ avisos de divergência — e afins (ver **SGI-4**, **SGI-11**) — cheguem de fa
 > FARIA, passo "Dados — 1 campo divergente... Aviso enviado por e-mail"; porém o
 > e-mail não chegou.
 
+### SGI-15 · 🔴 "Cidade de interesse" preenchida com o PAÍS de interesse (ex.: "Estados Unidos")
+
+No cadastro de novo lead, o campo **"Cidade de interesse"** foi preenchido com
+**"Estados Unidos"** — que é o **País de interesse**, não uma cidade. A origem
+(chatbot) trouxe **"Trabalhar e estudar (Estados Unidos)"**: "Estados Unidos" é o
+**país**. A automação preencheu **corretamente** o "País de interesse", mas
+**também copiou** o país para a "Cidade de interesse".
+
+**Ação sugerida:** **não copiar** o País de interesse para a Cidade de interesse. A
+"Cidade de interesse" só deve ser preenchida quando o lead informar **uma cidade
+real**; caso contrário, ficar **vazia**.
+
+> Evidência (2026-07-28): print com **País de interesse = "Estados Unidos"** e
+> **Cidade de interesse = "Estados Unidos"**; mensagem do chatbot "Interessado(a)
+> em Trabalhar e estudar (**Estados Unidos**)".
+
+**Relacionado:** **SGI-3** — mesmo campo, outra origem errada (lá é a **cidade de
+residência**). Regra geral: a "Cidade de interesse" **nunca** deve receber a cidade
+de residência **nem** o país; só uma cidade explicitamente informada pelo lead.
+
 ---
 
 ## 🗒️ Changelog
@@ -584,3 +609,7 @@ avisos de divergência — e afins (ver **SGI-4**, **SGI-11**) — cheguem de fa
   Evidência: lead **EMANUEL FARIA** (DataCrazy "Manel" preservado em vez de
   "EMANUEL FARIA"). Novo **SGI-14**: **aviso de divergência por e-mail não está
   chegando**.
+- **2026-07-28** — Novo **SGI-15**: "Cidade de interesse" preenchida com o **país
+  de interesse** ("Estados Unidos") — a automação copiou o país para a cidade.
+  Corrigir para não copiar; cidade só quando o lead informar. Relacionado ao
+  **SGI-3** (mesmo campo, origem errada diferente) — cruzamento adicionado nos dois.
