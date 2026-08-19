@@ -42,7 +42,7 @@ referência nas conversas com o dev.
 | SGI-12 | Entender/documentar o "nome completado" ("Karolyne" → nome completo) | A definir | ⚠️ A esclarecer |
 | SGI-13 | Ajustar o nome conforme CI GO (e substituir quando o nome cadastrado for só o do WhatsApp) | Média | 🔴 Aberto |
 | SGI-14 | Aviso de divergência por e-mail não está sendo recebido | Alta | 🔴 Aberto |
-| SGI-15 | "Cidade de interesse" preenchida com o país de interesse (ex.: "Estados Unidos") | Média | 🔴 Aberto |
+| SGI-15 | País de interesse confundido com cidade (vai p/ "Cidade de interesse" e não p/ "País de interesse") — ex.: Irlanda, Estados Unidos | Média | 🔴 Aberto |
 
 ---
 
@@ -496,25 +496,34 @@ avisos de divergência — e afins (ver **SGI-4**, **SGI-11**) — cheguem de fa
 > FARIA, passo "Dados — 1 campo divergente... Aviso enviado por e-mail"; porém o
 > e-mail não chegou.
 
-### SGI-15 · 🔴 "Cidade de interesse" preenchida com o PAÍS de interesse (ex.: "Estados Unidos")
+### SGI-15 · 🔴 País de interesse sendo confundido com cidade (vai para "Cidade de interesse" em vez de "País de interesse")
 
-No cadastro de novo lead, o campo **"Cidade de interesse"** foi preenchido com
-**"Estados Unidos"** — que é o **País de interesse**, não uma cidade. A origem
-(chatbot) trouxe **"Trabalhar e estudar (Estados Unidos)"**: "Estados Unidos" é o
-**país**. A automação preencheu **corretamente** o "País de interesse", mas
-**também copiou** o país para a "Cidade de interesse".
+O sistema está **confundindo o país de interesse com cidade**. Foram vistos **dois
+casos** (ambos são **países**, não cidades — comum em leads de **"Trabalhar e
+Estudar"**, onde o interesse é um **país**):
 
-**Ação sugerida:** **não copiar** o País de interesse para a Cidade de interesse. A
-"Cidade de interesse" só deve ser preenchida quando o lead informar **uma cidade
-real**; caso contrário, ficar **vazia**.
+- **"Estados Unidos":** o "País de interesse" foi preenchido **corretamente**, mas
+  o país **também foi copiado** para a "Cidade de interesse".
+- **"Irlanda":** o país **não foi para o campo "País de interesse"** (ficou
+  **vazio**, mostrando o mockup "Irlanda" — ver **SGI-8**) e **foi parar na "Cidade
+  de interesse"**.
 
-> Evidência (2026-07-28): print com **País de interesse = "Estados Unidos"** e
-> **Cidade de interesse = "Estados Unidos"**; mensagem do chatbot "Interessado(a)
-> em Trabalhar e estudar (**Estados Unidos**)".
+**Ação sugerida:**
+- Identificar corretamente o **país de interesse** e colocá-lo **no campo "País de
+  interesse"** (ex.: "Irlanda" deve ir para "País de interesse").
+- **Nunca** colocar o país na **"Cidade de interesse"** — esta só recebe uma
+  **cidade real** informada pelo lead; caso contrário, fica **vazia**.
 
-**Relacionado:** **SGI-3** — mesmo campo, outra origem errada (lá é a **cidade de
-residência**). Regra geral: a "Cidade de interesse" **nunca** deve receber a cidade
-de residência **nem** o país; só uma cidade explicitamente informada pelo lead.
+> Evidência (2026-07-28):
+> - Print 1: **País de interesse = "Estados Unidos"** **e** **Cidade de interesse =
+>   "Estados Unidos"** (chatbot: "Trabalhar e estudar (Estados Unidos)").
+> - Print 2: **País de interesse vazio** (mockup "Irlanda") **e** **Cidade de
+>   interesse = "Irlanda"** — o país "Irlanda" foi parar na cidade.
+
+**Relacionado:** **SGI-3** (mesmo campo "Cidade de interesse", mas com a **cidade
+de residência**) e **SGI-8** (mockup "Irlanda" no campo vazio). Regra geral: a
+"Cidade de interesse" **nunca** recebe cidade de residência nem país; e o **país**
+deve ir para **"País de interesse"**.
 
 ---
 
@@ -613,3 +622,7 @@ de residência **nem** o país; só uma cidade explicitamente informada pelo lea
   de interesse** ("Estados Unidos") — a automação copiou o país para a cidade.
   Corrigir para não copiar; cidade só quando o lead informar. Relacionado ao
   **SGI-3** (mesmo campo, origem errada diferente) — cruzamento adicionado nos dois.
+- **2026-07-28** — **SGI-15 reforçado** com o caso **"Irlanda"**: o país ficou
+  **vazio** no "País de interesse" e foi parar na "Cidade de interesse". Requisito
+  adicionado: o país deve **ir para o campo "País de interesse"** (não só "não
+  copiar para a cidade"). Cruzado também com **SGI-8**.
