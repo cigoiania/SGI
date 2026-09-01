@@ -16,6 +16,8 @@
 - 🔴 **Aberto** — bug/ajuste confirmado, aguardando correção do dev.
 - ⚠️ **A esclarecer** — pergunta em aberto, precisa de investigação/resposta
   antes de virar tarefa de dev.
+- 🟡 **Em construção** — spec sendo detalhada em conjunto (dev pode começar
+  pelas partes já fechadas).
 - ✅ **Resolvido** — corrigido e validado.
 
 ---
@@ -43,6 +45,7 @@ referência nas conversas com o dev.
 | SGI-13 | Ajustar o nome conforme CI GO (e substituir quando o nome cadastrado for só o do WhatsApp) | Média | 🔴 Aberto |
 | SGI-14 | Aviso de divergência por e-mail não está sendo recebido | Alta | 🔴 Aberto |
 | SGI-15 | País de interesse confundido com cidade (vai p/ "Cidade de interesse" e não p/ "País de interesse") — ex.: Irlanda, Estados Unidos | Média | 🔴 Aberto |
+| SGI-16 | [Detalhamento do SGI-6] Lógica de lançamento de vendas do Turismo — controle, conferência e conciliação | Alta | 🟡 Em construção |
 
 ---
 
@@ -292,6 +295,15 @@ ano**, sempre com **valor de custo, valor de venda e comissão**, além de trata
 definidas (ver seções acima). A spec está pronta para repasse ao dev; novos
 prints/detalhes podem refiná-la.
 
+> 📐 **Detalhamento técnico:** a **lógica** de como esses dados se comportam
+> (modelo de dados em camadas, cadeia de cálculo, máquinas de estado,
+> conferência da leitura por IA, conciliação bancária/fornecedor/comissão,
+> painel de divergências, fechamento de período e auditoria) está em
+> **[`turismo-lancamento-vendas.md`](./turismo-lancamento-vendas.md)** —
+> ver **SGI-16**. Este SGI-6 continua sendo a lista de **requisitos**
+> validada com o cliente; o outro arquivo é **como implementar** sem perder
+> controle, conferência e conciliação.
+
 ### SGI-7 · 🔴 [Novo módulo] Cadastros (base de dados mestre do sistema)
 
 **Objetivo:** Ter uma **área de Cadastros** (menu próprio) com os registros-base
@@ -525,6 +537,62 @@ de residência**) e **SGI-8** (mockup "Irlanda" no campo vazio). Regra geral: a
 "Cidade de interesse" **nunca** recebe cidade de residência nem país; e o **país**
 deve ir para **"País de interesse"**.
 
+### SGI-16 · 🟡 [Detalhamento do SGI-6] Lógica de lançamento de vendas do Turismo — controle, conferência e conciliação
+
+**Documento:** **[`turismo-lancamento-vendas.md`](./turismo-lancamento-vendas.md)**
+
+O **SGI-6** define **o que** o módulo de Pós-vendas do Turismo precisa ter
+(campos, telas, relatórios) e já foi validado com o cliente. O SGI-16 define
+**como a informação se comporta** — a camada que faltava para o módulo
+permitir **controle maior, conferência e conciliação**, e não só cadastro.
+
+**O problema que ele resolve:** o SGI-6 trata a venda como **um registro
+plano** (uma linha com custo, venda e comissão). Isso não sustenta:
+1. venda com **vários fornecedores** (hotel + transfer + passeios) — e a NF de
+   comissão é **por fornecedor**;
+2. **status de pagamento digitado à mão** — vira opinião, não fato;
+3. ausência de **parcela** e **baixa** — sem elas não há contas a receber/pagar
+   nem conciliação com o extrato;
+4. **"tudo editável"** (SGI-6 "g") sem versionamento — o resultado de um mês
+   fechado muda sozinho;
+5. **IA preenchendo direto o registro final** — erro de leitura entra no
+   relatório sem ninguém conferir.
+
+**O que a spec entrega (resumo):**
+- **Modelo em camadas:** `Venda → Itens (1 por voucher/fornecedor) → Parcelas →
+  Baixas → Conciliação`, mais Comissões, NF e Log de auditoria.
+- **Cadeia de cálculo** com a identidade `Venda = Custo + Markup` **travada**,
+  regras de arredondamento e **congelamento de parâmetros** (mudar o cadastro
+  não reescreve venda já lançada).
+- **6 dimensões de status** separadas (lançamento/conferência, venda,
+  financeiro **derivado**, comissão do fornecedor, comissão do vendedor,
+  conciliação) + **matriz de o que pode ser editado em cada status** — mantendo
+  a "edição total" do SGI-6, mas com **quem pode** e **rastro**.
+- **Conferência (dupla checagem):** campo lido pela IA nasce `sugerido` e só
+  vale quando **confirmado** por uma pessoa; valores financeiros nunca entram
+  automaticamente; `quem lança ≠ quem confere` (configurável).
+- **Conciliação em 4 laços:** documental, recebimento (extrato bancário),
+  fornecedor (extrato de fechamento) e comissão (previsto × NF × crédito, com
+  tratamento de **glosa**), incluindo regras de **casamento automático**.
+- **Painel de divergências** com **23 regras** verificadas automaticamente
+  (D1–D23), separadas em **bloqueantes** e **de atenção**.
+- **Cancelamento/reembolso/estorno**, **fechamento de período** (competência
+  mensal, com correção via lançamento de ajuste) e **relatórios** de controle
+  (fechamento do dia, aging, extrato por fornecedor, posição de comissões,
+  DRE simplificada).
+
+**Status:** o corpo da spec está fechado o suficiente para orçar e começar a
+implementar. Restam **12 decisões do cliente** isoladas na seção
+**"14. Decisões pendentes"**, cada uma com **sugestão de padrão** — as
+principais: base da comissão do fornecedor (custo × venda), comissão por
+**repasse** ou **dedução**, quando a comissão do vendedor fica devida, estorno
+em cancelamento, e se existe venda em **moeda estrangeira**.
+
+**Sugestão de ordem de implementação:** começar por **modelo de dados** e
+**máquinas de estado** — não dependem de nenhuma decisão pendente.
+
+---
+
 ---
 
 ## 🗒️ Changelog
@@ -626,3 +694,16 @@ deve ir para **"País de interesse"**.
   **vazio** no "País de interesse" e foi parar na "Cidade de interesse". Requisito
   adicionado: o país deve **ir para o campo "País de interesse"** (não só "não
   copiar para a cidade"). Cruzado também com **SGI-8**.
+- **2026-09-01** — Registrado o **SGI-16**: novo documento
+  **`turismo-lancamento-vendas.md`** com a **lógica** de lançamento de vendas do
+  Turismo (detalhamento do SGI-6), voltada a **controle, conferência e
+  conciliação**. Abre a venda em camadas (**venda → itens por
+  voucher/fornecedor → parcelas → baixas → conciliação**), torna o **status
+  financeiro derivado** (não digitado), trava a identidade `Venda = Custo +
+  Markup`, congela parâmetros por lançamento (**snapshot**), separa **6
+  dimensões de status** com matriz de edição, exige **conferência humana** do
+  que a IA extrai, define os **4 laços de conciliação** (documental, banco,
+  fornecedor, comissão — com **glosa**) e as regras de **matching**, cria o
+  **painel de divergências (D1–D23)**, o **fechamento de período** por
+  competência e os **relatórios de controle**. Restam **12 decisões do cliente**
+  na seção 14, todas com sugestão de padrão.
